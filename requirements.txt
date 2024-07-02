@@ -1,11 +1,11 @@
 asyncio==3.4.3
 python-dotenv==1.0.1
-aiogram==3.7.0
+aiogram==3.8.0
 pandas==2.2.2
 torch==2.3.1
 datasets==2.20.0
-transformers==4.41.2
+transformers==4.42.3
 nltk==3.8.1
 pycocoevalcap==1.2
-wandb==0.17.2
+wandb==0.17.3
 scikit-learn==1.5.0
