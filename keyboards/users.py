@@ -5,7 +5,7 @@ def kb_start():
     buttons = [
         [
             types.InlineKeyboardButton(
-                text="Создать первую историю", callback_data="kb_start"
+                text="Создать первую книгу", callback_data="kb_start"
             ),
         ]
     ]
