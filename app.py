@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
 from utils.commands import set_commands
-from handlers import home
+from handlers import home, users
 
 load_dotenv()
 
@@ -21,6 +21,7 @@ async def start():
 
 
 dp.include_router(home.router)
+dp.include_router(users.router)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 from aiogram import types, Router
 from aiogram.filters.command import Command
 
-from keyboards.users import kb_start
+from keyboards.users import kb_first_story
 
 router = Router()
 
@@ -20,4 +20,4 @@ async def cmd_start(message: types.Message):
         "➤  скачивать книги, чтобы распечатать их или поделиться;\n"
         "➤  отправлять книги в социальные сети и мессенджеры."
     )
-    await message.answer(msg, reply_markup=kb_start())
+    await message.answer(msg, reply_markup=kb_first_story())

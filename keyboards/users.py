@@ -1,11 +1,11 @@
 from aiogram import types
 
 
-def kb_start():
+def kb_first_story():
     buttons = [
         [
             types.InlineKeyboardButton(
-                text="Создать первую книгу", callback_data="kb_start"
+                text="Создать первую книгу", callback_data="new_story"
             ),
         ]
     ]
