@@ -1,0 +1,53 @@
+from aiogram import Router, F
+from aiogram.types import Message, CallbackQuery
+from aiogram.fsm.context import FSMContext
+
+from utils.states import ProcessImageStates
+from keyboards.users import kb_create_story
+
+
+router = Router()
+
+
+@router.callback_query(F.data == "new_story")
+async def cmn_new_story(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer(
+        "📷 Загрузите до 20 детских фотографий и опишите события, которые на них происходят"
+    )
+    await state.update_data(photos=[])
+    await state.set_state(ProcessImageStates.addImage)
+
+
+@router.message(ProcessImageStates.addImage)
+async def cmn_process_images(message: Message, state: FSMContext):
+    if message.content_type == "photo":
+        data = await state.get_data()
+        if len(data["photos"]) < 20:
+            data["photos"].append(message.photo[-1].file_id)
+        else:
+            await message.answer("Вы загрузили максимальное количество фотографий")
+        await state.set_state(ProcessImageStates.addText)
+    else:
+        await message.answer("Сейчас необходимо загрузить фотографии")
+        await state.set_state(ProcessImageStates.addImage)
+
+
+@router.message(ProcessImageStates.addText)
+async def cmn_process_text(message: Message, state: FSMContext):
+    if message.content_type == "text":
+        await state.update_data(descript=message.text)
+        await message.answer(
+            "Давайте создадим новую историю 🤩", reply_markup=kb_create_story()
+        )
+    else:
+        await message.answer(
+            "Сейчас необходимо описать события, которые происходят на фотографиях"
+        )
+        await state.set_state(ProcessImageStates.addText)
+
+
+@router.callback_query(F.data == "create_story")
+async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
+    pass
+    # data = await state.get_data()
+    # await state.reset()
