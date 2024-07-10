@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 
 from utils.states import ProcessImageStates
 from keyboards.users import kb_create_story
+from repository.services import create_story
 
 
 router = Router()
@@ -48,6 +49,8 @@ async def cmn_process_text(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "create_story")
 async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
-    pass
-    # data = await state.get_data()
+    data = await state.get_data()
+    captions = create_story(data["photos"])
+
     # await state.reset()
+    #await callback.message.answer("Ваша история")
