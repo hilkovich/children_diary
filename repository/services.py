@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 from PIL import Image
 from dotenv import load_dotenv
@@ -6,13 +7,15 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 
 load_dotenv()
 TG_TOKEN = os.getenv("TG_TOKEN")
+ID_CATALOG_YANDEX = os.environ["ID_CATALOG_YANDEX"]
+API_KEY_YANDEX = os.environ["API_KEY_YANDEX"]
 
 model_name = "notebooks/models/git-base-train"
 processor = AutoProcessor.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 
 
-def tg_photo_url(photo_file_id):
+def tg_photo_url(photo_file_id: str):
     url = f"https://api.telegram.org/bot{TG_TOKEN}/getFile?file_id={photo_file_id}"
     file_path = requests.get(url).json()["result"]["file_path"]
     photo_url = f"https://api.telegram.org/file/bot{TG_TOKEN}/{file_path}"
@@ -30,3 +33,31 @@ def gen_captions(photos: dict):
         captions.append(caption)
 
     return captions
+
+
+def gen_story(message):
+    prompt = {
+        "modelUri": f"gpt://{ID_CATALOG_YANDEX}/yandexgpt/latest",
+        "completionOptions": {"stream": False, "temperature": 0.6, "maxTokens": "2000"},
+        "messages": [
+            {
+                "role": "system",
+                "text": "Ты русский писатель детских рассказов. Всегда возвращаешь текст только на русском.",
+            },
+            {
+                "role": "user",
+                "text": message,
+            },
+        ],
+    }
+
+    url = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Api-Key {API_KEY_YANDEX}",
+    }
+
+    response = requests.post(url, headers=headers, json=prompt)
+    result = json.loads(response.text)
+
+    return result["result"]["alternatives"][0]["message"]["text"]
