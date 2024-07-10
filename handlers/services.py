@@ -3,8 +3,8 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from utils.states import ProcessImageStates
-from keyboards.users import kb_create_story
-from repository.services import gen_captions
+from keyboards.users import kb_create_story, kb_save_story
+from repository.services import gen_captions, gen_story, gen_message
 
 
 router = Router()
@@ -51,6 +51,6 @@ async def cmn_process_text(message: Message, state: FSMContext):
 async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     captions = gen_captions(data["photos"])
-
-    # await state.reset()
-    # await callback.message.answer("Ваша история")
+    msg = gen_message(captions, data["descript"])
+    history = gen_story(msg)
+    await callback.message.answer(f"{history}", reply_markup=kb_save_story())
