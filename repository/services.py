@@ -35,7 +35,7 @@ def gen_captions(photos: dict):
     return captions
 
 
-def gen_story(message):
+def gen_story(message: str):
     prompt = {
         "modelUri": f"gpt://{ID_CATALOG_YANDEX}/yandexgpt/latest",
         "completionOptions": {"stream": False, "temperature": 0.6, "maxTokens": "2000"},
@@ -61,3 +61,16 @@ def gen_story(message):
     result = json.loads(response.text)
 
     return result["result"]["alternatives"][0]["message"]["text"]
+
+
+def gen_message(captions, descript):
+    setup_input = "В тексте не использовать слова фотография, изображение, затем"
+
+    message = f"""
+            Напиши развернутое описание от первого лица происходящего на {len(captions)} фотографиях объединив в сюжет.
+            Описания фотографий: {captions}.
+            Дополнительное описание к фотографий: {descript}.
+            Дополнительные требования: {setup_input}.
+            """
+
+    return message
