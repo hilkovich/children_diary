@@ -27,7 +27,9 @@ def kb_save_story():
     buttons = [
         [
             types.InlineKeyboardButton(text="Сохранить", callback_data="save_story"),
-            types.InlineKeyboardButton(text="Показать еще", callback_data="more_story"),
+            types.InlineKeyboardButton(
+                text="Показать еще", callback_data="create_story"
+            ),
         ]
     ]
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
