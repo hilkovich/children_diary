@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
+from aiogram.filters.command import Command
 
 from utils.states import ProcessImageStates
 from keyboards.users import kb_create_story, kb_save_story
@@ -10,10 +11,25 @@ from repository.services import gen_captions, gen_story, gen_message
 router = Router()
 
 
+@router.message(Command("new"))
+async def comm_new_story(message: Message, state: FSMContext):
+    await message.answer(
+        "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
+    )
+    await message.answer(
+        "➤ Затем опишите события, которые на них происходят. Например: Первый день летних каникул Кристины 7 лет."
+    )
+    await state.update_data(photos=[])
+    await state.set_state(ProcessImageStates.addImage)
+
+
 @router.callback_query(F.data == "new_story")
 async def cmn_new_story(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(
-        "📷 Загрузите до 20 детских фотографий и опишите события, которые на них происходят"
+        "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
+    )
+    await callback.message.answer(
+        "➤ Затем опишите события, которые на них происходят. Например: Первый день летних каникул Кристины 7 лет."
     )
     await state.update_data(photos=[])
     await state.set_state(ProcessImageStates.addImage)
@@ -49,6 +65,7 @@ async def cmn_process_text(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "create_story")
 async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer("Создаю историю...")
     data = await state.get_data()
     captions = gen_captions(data["photos"])
     msg = gen_message(captions, data["descript"])

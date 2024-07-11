@@ -1,4 +1,5 @@
-from aiogram import types, Router
+from aiogram import Router
+from aiogram.types import Message
 from aiogram.filters.command import Command
 
 from keyboards.users import kb_first_story
@@ -7,7 +8,7 @@ router = Router()
 
 
 @router.message(Command("start"))
-async def cmd_start(message: types.Message):
+async def cmd_start(message: Message):
     msg = (
         "Привет 👋\n"
         "Я — ботик, умею создавать и вести книги с индивидуальной историей ребенка.\n\n"
