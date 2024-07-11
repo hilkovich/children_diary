@@ -5,12 +5,16 @@ from aiogram.filters.command import Command
 
 from keyboards.users import kb_first_story
 from utils.states import ProcessImageStates
+from repository.users import get_user, add_user
 
 router = Router()
 
 
 @router.message(Command("start"))
 async def cmd_start(message: Message):
+    user = get_user(message.from_user.id)
+    if user is None:
+        add_user(message.from_user.id)
     msg = (
         "Привет 👋\n"
         "Я — ботик, умею создавать и вести книги с индивидуальной историей ребенка.\n\n"
