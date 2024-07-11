@@ -1,8 +1,10 @@
 from aiogram import Router
 from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
 from keyboards.users import kb_first_story
+from utils.states import ProcessImageStates
 
 router = Router()
 
@@ -22,3 +24,15 @@ async def cmd_start(message: Message):
         "➤  отправлять книги в социальные сети и мессенджеры."
     )
     await message.answer(msg, reply_markup=kb_first_story())
+
+
+@router.message(Command("new"))
+async def cmn_new_story(message: Message, state: FSMContext):
+    await message.answer(
+        "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
+    )
+    await message.answer(
+        "➤ Затем опишите события, которые на них происходят. Например: Первый день летних каникул Кристины 7 лет."
+    )
+    await state.update_data(photos=[])
+    await state.set_state(ProcessImageStates.addImage)

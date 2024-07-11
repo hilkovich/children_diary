@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
 from utils.commands import set_commands
-from handlers import home, services
+from handlers import command, stories
 
 load_dotenv()
 
@@ -20,8 +20,8 @@ async def start():
         await bot.session.close()
 
 
-dp.include_router(home.router)
-dp.include_router(services.router)
+dp.include_router(command.router)
+dp.include_router(stories.router)
 
 
 if __name__ == "__main__":
