@@ -3,7 +3,6 @@ from sqlalchemy.orm import DeclarativeBase, relationship
 
 from database.connection import Engine
 from models.users import User
-from models.books import Book
 
 
 class Base(DeclarativeBase):
@@ -13,10 +12,9 @@ class Base(DeclarativeBase):
 class History(Base):
     __tablename__ = "history"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id))
+    user_id = Column(Integer, ForeignKey(User.telegram_id))
     user = relationship(User)
-    book_id = Column(Integer, ForeignKey(Book.id))
-    book = relationship(Book)
+    book_id = Column(Integer)
     data_task = Column(DateTime)
     photo_caption = Column(String)
     photo_descript = Column(String)

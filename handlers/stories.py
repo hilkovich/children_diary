@@ -37,7 +37,7 @@ async def cmn_process_images(message: Message, state: FSMContext):
 
 @router.message(ProcessImageStates.addText)
 async def cmn_process_text(message: Message, state: FSMContext):
-    if message.content_type == "text":
+    if message.content_type != "photo":
         await state.update_data(descript=message.text)
         await message.answer(
             "Давайте создадим новую историю 🤩", reply_markup=kb_create_story()
@@ -55,6 +55,6 @@ async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     captions = gen_captions(data["photos"])
     msg = gen_message(captions, data["descript"])
-    history = gen_story(msg)
+    history = gen_story(msg).replace("\n\n", "\n")
     await state.update_data(history=history)
     await callback.message.answer(f"{history}", reply_markup=kb_save_story())

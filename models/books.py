@@ -12,7 +12,7 @@ class Base(DeclarativeBase):
 class Book(Base):
     __tablename__ = "books"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id))
+    user_id = Column(Integer, ForeignKey(User.telegram_id))
     user = relationship(User)
     data_book = Column(DateTime)
     book_num = Column(Integer)

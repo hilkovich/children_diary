@@ -6,20 +6,19 @@ from models.books import Book
 
 def get_num_book(telegram_id):
     with SessionLocal() as session:
-        num = (
+        return (
             session.query(Book)
             .filter_by(user_id=telegram_id)
             .order_by(Book.book_num.desc())
             .first()
         )
-        return num.book_num
 
 
 def add_book(telegram_id, book_name):
     if get_num_book(telegram_id) is None:
-        book_num = 1
+        book_num = 0
     else:
-        book_num = get_num_book(telegram_id)
+        book_num = get_num_book(telegram_id).book_num
 
     with SessionLocal() as session:
         new_book = Book(
@@ -30,3 +29,23 @@ def add_book(telegram_id, book_name):
         )
         session.add(new_book)
         session.commit()
+
+
+"""def get_all_book(telegram_id):
+    with SessionLocal() as session:
+        all_book = (
+            session.query(Book)
+            .filter_by(user_id=telegram_id)
+            .order_by(Book.book_num.asc())
+            .all()
+        )
+
+        books = ""
+        num = all_book.book_num
+        name = all_book.book_name
+
+        for i in range(len(name)):
+            books += f"{num[i]}: {name[i]}\n"
+
+        return books
+"""

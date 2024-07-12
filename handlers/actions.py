@@ -13,7 +13,7 @@ router = Router()
 @router.callback_query(F.data == "save_story")
 async def cmn_save_story(callback: CallbackQuery):
     await callback.message.answer(
-        "Создайте новую книгу или добавьте главу в ваши книги",
+        "Создайте новую книгу или добавьте главу в вашу книгу",
         reply_markup=kb_new_book(),
     )
 
@@ -30,8 +30,15 @@ async def cmn_name_book(message: Message, state: FSMContext):
         data = await state.get_data()
 
         add_book(message.from_user.id, message.text)
-        book_id = get_num_book(message.from_user.id)
-        add_history(message.from_user.id, data["photos"], data["descript"], data["history"], book_id, 1)
+        book_id = get_num_book(message.from_user.id).book_num
+        add_history(
+            message.from_user.id,
+            data["photos"],
+            data["descript"],
+            data["history"],
+            book_id,
+            1,
+        )
 
         await state.clear()
         await message.answer("Вы создали новую книгу и сохранили историю 🎉")
@@ -40,8 +47,10 @@ async def cmn_name_book(message: Message, state: FSMContext):
         await state.set_state(ProcessImageStates.addBook)
 
 
-@router.callback_query(F.data == "")
-async def cmn_save_story(callback: CallbackQuery, state: FSMContext):
+"""@router.callback_query(F.data == "save_book")
+async def cmn_save_book(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
+
     await state.clear()
     await callback.message.answer("История сохранена 🎉")
+"""
