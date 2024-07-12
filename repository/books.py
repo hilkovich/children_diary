@@ -45,3 +45,13 @@ def get_all_book(telegram_id):
             books += f"{book}\n"
 
         return books
+
+
+def get_last_book(telegram_id):
+    with SessionLocal() as session:
+        return (
+            session.query(Book)
+            .filter_by(user_id=telegram_id)
+            .order_by(Book.book_num.asc())
+            .first()
+        )

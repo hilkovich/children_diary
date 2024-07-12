@@ -1,9 +1,10 @@
+import re
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from keyboards.books import kb_new_book
-from repository.books import add_book, get_num_book, get_all_book
+from repository.books import add_book, get_num_book, get_all_book, get_last_book
 from repository.history import add_history
 from utils.states import ProcessBookStates
 
@@ -49,12 +50,37 @@ async def cmn_name_book(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "save_book")
 async def cmn_save_book(callback: CallbackQuery, state: FSMContext):
-    books = get_all_book(callback.from_user.id)
-    await callback.message.answer(f"Доступные книги:\n{books}")
-    await callback.message.answer("Укажите номер книги")
-    await state.set_state(ProcessBookStates.numBook)
+    book_id = get_num_book(callback.from_user.id)
+    if book_id is None:
+        await callback.message.answer("Созданных книг не существует")
+    else:
+        books = get_all_book(callback.from_user.id)
+        await callback.message.answer(f"Доступные книги:\n{books}")
+        await callback.message.answer("Укажите номер книги")
+        await state.set_state(ProcessBookStates.numBook)
 
 
-# data = await state.get_data()
-# await state.clear()
-# await callback.message.answer(f"История сохранена 🎉 \n{all_book}")
+@router.message(ProcessBookStates.numBook)
+async def cmn_num_book(message: Message, state: FSMContext):
+    if re.findall(r"\d+", message.text):
+        last_book = get_last_book(message.from_user.id)
+        if last_book.book_num < int(message.text):
+            await message.answer("Такой книги не существует")
+            await state.set_state(ProcessBookStates.numBook)
+        else:
+            data = await state.get_data()
+
+            add_history(
+                message.from_user.id,
+                data["photos"],
+                data["descript"],
+                data["history"],
+                int(message.text),
+                1,
+            )
+
+            await state.clear()
+            await message.answer("История сохранена 🎉")
+    else:
+        await message.answer("Необходимо указать номер книги")
+        await state.set_state(ProcessBookStates.numBook)
