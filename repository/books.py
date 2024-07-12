@@ -31,7 +31,7 @@ def add_book(telegram_id, book_name):
         session.commit()
 
 
-"""def get_all_book(telegram_id):
+def get_all_book(telegram_id):
     with SessionLocal() as session:
         all_book = (
             session.query(Book)
@@ -41,11 +41,7 @@ def add_book(telegram_id, book_name):
         )
 
         books = ""
-        num = all_book.book_num
-        name = all_book.book_name
-
-        for i in range(len(name)):
-            books += f"{num[i]}: {name[i]}\n"
+        for book in all_book:
+            books += f"{book}\n"
 
         return books
-"""

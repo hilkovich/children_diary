@@ -18,6 +18,12 @@ class Book(Base):
     book_num = Column(Integer)
     book_name = Column(String)
 
+    def __str__(self):
+        return f"{self.book_num}. {self.book_name}"
+
+    def __repr__(self):
+        return f"{self.book_num}. {self.book_name}"
+
 
 if __name__ == "__main__":
     metadata = MetaData()
