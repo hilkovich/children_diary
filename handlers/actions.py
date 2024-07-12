@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from keyboards.users import kb_new_book
+from keyboards.books import kb_new_book
 from repository.books import add_book, get_num_book
 from repository.history import add_history
 from utils.states import ProcessImageStates

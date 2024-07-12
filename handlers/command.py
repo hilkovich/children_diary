@@ -3,7 +3,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
-from keyboards.users import kb_first_story
+from keyboards.history import kb_first_story
 from utils.states import ProcessImageStates
 from repository.users import get_user, add_user
 
