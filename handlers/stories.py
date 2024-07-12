@@ -6,7 +6,6 @@ from utils.states import ProcessImageStates
 from keyboards.users import kb_create_story, kb_save_story
 from repository.prediction import gen_captions, gen_story, gen_message
 
-
 router = Router()
 
 
