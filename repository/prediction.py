@@ -63,7 +63,7 @@ def gen_story(message: str):
     return result["result"]["alternatives"][0]["message"]["text"]
 
 
-def gen_message(captions: dict, descript: str):
+def gen_message(captions, descript: str):
     setup_input = "В тексте не использовать слова фотография, изображение, затем"
 
     message = f"""
