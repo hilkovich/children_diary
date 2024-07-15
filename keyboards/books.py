@@ -13,3 +13,14 @@ def kb_new_book():
         ]
     ]
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def kb_show_book():
+    buttons = [
+        [
+            types.InlineKeyboardButton(
+                text="Посмотреть книгу", callback_data="show_book"
+            ),
+        ]
+    ]
+    return types.InlineKeyboardMarkup(inline_keyboard=buttons)
