@@ -52,6 +52,6 @@ def get_last_book(telegram_id):
         return (
             session.query(Book)
             .filter_by(user_id=telegram_id)
-            .order_by(Book.book_num.asc())
+            .order_by(Book.book_num.desc())
             .first()
         )

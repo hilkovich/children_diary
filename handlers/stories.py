@@ -3,7 +3,8 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
 from utils.states import ProcessImageStates
-from keyboards.history import kb_create_story, kb_save_story
+from repository.history import add_history
+from keyboards.history import kb_create_story, kb_save_story, kb_repeat_story
 from repository.prediction import gen_captions, gen_story, gen_message
 
 router = Router()
@@ -57,5 +58,22 @@ async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
     msg = gen_message(captions, data["descript"])
     history = gen_story(msg).replace("\n\n", "\n")
     await state.update_data(history=history)
-    await state.update_data(photos=captions)
+    await state.update_data(captions=captions)
     await callback.message.answer(f"{history}", reply_markup=kb_save_story())
+
+
+@router.callback_query(F.data == "repeat_story")
+async def cmn_repeat_story(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    add_history(
+        callback.from_user.id,
+        data["captions"],
+        data["descript"],
+        data["history"],
+        None,
+        0,
+    )
+    await callback.message.answer(
+        "Жаль, что вам не понравилась история 🥺\nСделаем новую?",
+        reply_markup=kb_repeat_story(),
+    )

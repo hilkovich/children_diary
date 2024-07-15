@@ -34,7 +34,7 @@ async def cmn_name_book(message: Message, state: FSMContext):
         book_id = get_num_book(message.from_user.id).book_num
         add_history(
             message.from_user.id,
-            data["photos"],
+            data["captions"],
             data["descript"],
             data["history"],
             book_id,
@@ -64,7 +64,7 @@ async def cmn_save_book(callback: CallbackQuery, state: FSMContext):
 async def cmn_num_book(message: Message, state: FSMContext):
     if re.findall(r"\d+", message.text):
         last_book = get_last_book(message.from_user.id)
-        if last_book.book_num < int(message.text):
+        if last_book.book_num < int(message.text) or int(message.text) == 0:
             await message.answer("Такой книги не существует")
             await state.set_state(ProcessBookStates.numBook)
         else:
@@ -72,7 +72,7 @@ async def cmn_num_book(message: Message, state: FSMContext):
 
             add_history(
                 message.from_user.id,
-                data["photos"],
+                data["captions"],
                 data["descript"],
                 data["history"],
                 int(message.text),

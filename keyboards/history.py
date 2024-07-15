@@ -28,8 +28,18 @@ def kb_save_story():
         [
             types.InlineKeyboardButton(text="Сохранить", callback_data="save_story"),
             types.InlineKeyboardButton(
-                text="Показать еще", callback_data="create_story"
+                text="Повторить запрос", callback_data="repeat_story"
             ),
+        ]
+    ]
+    return types.InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def kb_repeat_story():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Повторить", callback_data="create_story"),
+            types.InlineKeyboardButton(text="Изменить фото", callback_data="new_story"),
         ]
     ]
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
