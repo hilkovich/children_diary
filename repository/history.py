@@ -19,3 +19,15 @@ def add_history(
         )
         session.add(new_history)
         session.commit()
+
+
+def get_all_history(telegram_id, book_id):
+    with SessionLocal() as session:
+        all_history = (
+            session.query(History)
+            .filter_by(user_id=telegram_id, book_id=book_id, story_save=1)
+            .order_by(History.data_task.asc())
+            .all()
+        )
+
+        return all_history

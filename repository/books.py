@@ -47,11 +47,16 @@ def get_all_book(telegram_id):
         return books
 
 
-def get_last_book(telegram_id):
+def get_name_book(telegram_id, book_id):
     with SessionLocal() as session:
         return (
-            session.query(Book)
-            .filter_by(user_id=telegram_id)
-            .order_by(Book.book_num.desc())
-            .first()
+            session.query(Book).filter_by(user_id=telegram_id, book_num=book_id).first()
         )
+
+
+def get_one_book(telegram_id, book_id, book_history):
+    with open(f"books/{telegram_id}_{book_id}.docx", "w", encoding="utf-8") as file:
+        for i in range(len(book_history)):
+            file.write(f"Глава №{i+1}\n\n")
+            file.write(str(book_history[i]))
+            file.write("\n\n")

@@ -21,6 +21,12 @@ class History(Base):
     photo_story = Column(String)
     story_save = Column(Integer)
 
+    def __str__(self):
+        return f"{self.photo_story}"
+
+    def __repr__(self):
+        return f"{self.photo_story}"
+
 
 if __name__ == "__main__":
     metadata = MetaData()

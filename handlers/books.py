@@ -1,11 +1,17 @@
 import re
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
 
 from keyboards.books import kb_new_book
-from repository.books import add_book, get_num_book, get_all_book, get_last_book
-from repository.history import add_history
+from repository.books import (
+    add_book,
+    get_num_book,
+    get_all_book,
+    get_one_book,
+    get_name_book,
+)
+from repository.history import add_history, get_all_history
 from utils.states import ProcessBookStates
 
 router = Router()
@@ -63,7 +69,7 @@ async def cmn_save_book(callback: CallbackQuery, state: FSMContext):
 @router.message(ProcessBookStates.numBook)
 async def cmn_num_book(message: Message, state: FSMContext):
     if re.findall(r"\d+", message.text):
-        last_book = get_last_book(message.from_user.id)
+        last_book = get_num_book(message.from_user.id)
         if last_book.book_num < int(message.text) or int(message.text) == 0:
             await message.answer("Такой книги не существует")
             await state.set_state(ProcessBookStates.numBook)
@@ -84,3 +90,31 @@ async def cmn_num_book(message: Message, state: FSMContext):
     else:
         await message.answer("Необходимо указать номер книги")
         await state.set_state(ProcessBookStates.numBook)
+
+
+@router.callback_query(F.data == "show_book")
+async def cmn_show_book(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer("Необходимо указать номер книги")
+    await state.set_state(ProcessBookStates.allBook)
+
+
+@router.message(ProcessBookStates.allBook)
+async def cmn_one_book(message: Message, state: FSMContext):
+    if re.findall(r"\d+", message.text):
+        last_book = get_num_book(message.from_user.id)
+        if last_book.book_num < int(message.text) or int(message.text) == 0:
+            await message.answer("Такой книги не существует")
+            await state.set_state(ProcessBookStates.allBook)
+        else:
+            books = get_all_history(message.from_user.id, int(message.text))
+            get_one_book(message.from_user.id, int(message.text), books)
+            name_book = get_name_book(message.from_user.id, int(message.text)).book_name
+
+            book_file = FSInputFile(
+                path=f"books/{message.from_user.id}_{int(message.text)}.docx",
+                filename=name_book,
+            )
+            await message.answer_document(document=book_file)
+    else:
+        await message.answer("Необходимо указать номер книги")
+        await state.set_state(ProcessBookStates.allBook)

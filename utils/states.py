@@ -9,3 +9,4 @@ class ProcessImageStates(StatesGroup):
 class ProcessBookStates(StatesGroup):
     addBook = State()
     numBook = State()
+    allBook = State()

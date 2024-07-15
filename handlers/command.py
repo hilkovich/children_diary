@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
 from keyboards.history import kb_first_story
+from keyboards.books import kb_show_book
 from utils.states import ProcessImageStates
 from repository.users import get_user, add_user
 from repository.books import get_all_book
@@ -46,4 +47,4 @@ async def cmn_new_story(message: Message, state: FSMContext):
 @router.message(Command("books"))
 async def cmn_all_books(message: Message):
     books = get_all_book(message.from_user.id)
-    await message.answer(f"Доступные книги:\n{books}")
+    await message.answer(f"Доступные книги:\n{books}", reply_markup=kb_show_book())
