@@ -1,4 +1,5 @@
 import re
+import os
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
@@ -110,11 +111,10 @@ async def cmn_one_book(message: Message, state: FSMContext):
             get_one_book(message.from_user.id, int(message.text), books)
             name_book = get_name_book(message.from_user.id, int(message.text)).book_name
 
-            book_file = FSInputFile(
-                path=f"books/{message.from_user.id}_{int(message.text)}.docx",
-                filename=name_book,
-            )
+            dir_file = f"books/{message.from_user.id}_{int(message.text)}.docx"
+            book_file = FSInputFile(path=dir_file, filename=name_book)
             await message.answer_document(document=book_file)
+            os.remove(dir_file)
     else:
         await message.answer("Необходимо указать номер книги")
         await state.set_state(ProcessBookStates.allBook)
