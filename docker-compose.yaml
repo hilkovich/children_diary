@@ -22,3 +22,12 @@ services:
       - "15672:15672"
     env_file:
       - .env
+
+  bot:
+    container_name: child_diary_bot
+    build: ./bot
+    image: child-diary-bot:latest
+    ports:
+    - "8080:8080"
+    env_file:
+      - .env
