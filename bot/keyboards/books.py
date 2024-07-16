@@ -1,7 +1,7 @@
 from aiogram import types
 
 
-def kb_new_book():
+def kb_create_save_book():
     buttons = [
         [
             types.InlineKeyboardButton(
@@ -15,11 +15,11 @@ def kb_new_book():
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def kb_show_book():
+def kb_download_book():
     buttons = [
         [
             types.InlineKeyboardButton(
-                text="Посмотреть книгу", callback_data="show_book"
+                text="Скачать книгу", callback_data="download_book"
             ),
         ]
     ]
