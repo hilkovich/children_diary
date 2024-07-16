@@ -1,6 +1,6 @@
 import pytest
 
-from repository.history import add_history, get_all_history
+from bot.repository.history import add_history, get_all_history
 
 
 def test_add_history():

@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-from models.users import Base as UserBase
-from models.books import Base as BookBase
-from models.history import Base as HistoryBase
+from bot.models.users import Base as UserBase
+from bot.models import Base as BookBase
+from bot.models.history import Base as HistoryBase
 
 load_dotenv()
 

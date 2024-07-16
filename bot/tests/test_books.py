@@ -1,6 +1,6 @@
 import pytest
 
-from repository.books import get_num_book, add_book, get_name_book
+from bot.repository.books import get_num_book, add_book, get_name_book
 
 
 def test_add_book():

@@ -1,6 +1,6 @@
 import pytest
 
-from repository.users import add_user, get_user
+from bot.repository.users import add_user, get_user
 
 
 def test_add_user():

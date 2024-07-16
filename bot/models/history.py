@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, MetaData, String
 from sqlalchemy.orm import DeclarativeBase, relationship
 
-from database.connection import Engine
-from models.users import User
+from bot.database.connection import Engine
+from bot.models.users import User
 
 
 class Base(DeclarativeBase):

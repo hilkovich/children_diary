@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, DateTime, MetaData
 from sqlalchemy.orm import DeclarativeBase
 
-from database.connection import Engine
+from bot.database.connection import Engine
 
 
 class Base(DeclarativeBase):

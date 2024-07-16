@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
 
-  rabbit:
+  rabbitmq:
     image: rabbitmq:3.13.4-management
     hostname: rabbitmq
     environment:
@@ -24,9 +24,9 @@ services:
       - .env
 
   bot:
-    container_name: child_diary_bot
+    container_name: bot_child_diary
     build: ./bot
-    image: child-diary-bot:latest
+    image: bot-child-diary:latest
     ports:
     - "8080:8080"
     env_file:

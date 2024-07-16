@@ -3,8 +3,9 @@ import asyncio
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
-from utils.commands import set_commands
-from handlers import command, history, books
+from bot.utils.commands import set_commands
+from bot.handlers import history
+from bot.handlers import books, command
 
 load_dotenv()
 

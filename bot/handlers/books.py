@@ -4,16 +4,16 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
 
-from keyboards.books import kb_new_book
-from repository.books import (
+from bot.keyboards import kb_new_book
+from bot.repository import (
     add_book,
     get_num_book,
     get_all_book,
     get_one_book,
     get_name_book,
 )
-from repository.history import add_history, get_all_history
-from utils.states import ProcessBookStates
+from bot.repository import add_history, get_all_history
+from bot.utils import ProcessBookStates
 
 router = Router()
 

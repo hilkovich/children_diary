@@ -6,10 +6,10 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from utils.states import ProcessImageStates
-from repository.history import add_history
-from keyboards.history import kb_create_story, kb_save_story, kb_repeat_story
-from repository.prediction import gen_captions, gen_story, gen_message
+from bot.utils import ProcessImageStates
+from bot.repository import add_history
+from bot.keyboards.history import kb_create_story, kb_save_story, kb_repeat_story
+from bot.repository import gen_captions, gen_story, gen_message
 
 load_dotenv()
 

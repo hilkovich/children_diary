@@ -1,6 +1,6 @@
 import pytest
 
-from repository.prediction import gen_story, gen_message
+from bot.repository.prediction import gen_story, gen_message
 
 
 def test_gen_story():
