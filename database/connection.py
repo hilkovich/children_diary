@@ -3,6 +3,10 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+from models.users import Base as UserBase
+from models.books import Base as BookBase
+from models.history import Base as HistoryBase
+
 load_dotenv()
 
 username = os.getenv("POSTGRES_USER")
@@ -16,3 +20,7 @@ Engine = create_engine(f"postgresql://{username}:{password}@{host}:{port}/{datab
 SessionLocal = sessionmaker(bind=Engine)
 
 Base = declarative_base()
+
+UserBase.metadata.create_all(bind=Engine)
+BookBase.metadata.create_all(bind=Engine)
+HistoryBase.metadata.create_all(bind=Engine)
