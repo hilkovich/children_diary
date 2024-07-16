@@ -1,11 +1,6 @@
-from sqlalchemy import Column, Integer, DateTime, MetaData
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Column, Integer, DateTime
 
-from bot.database.connection import Engine
-
-
-class Base(DeclarativeBase):
-    pass
+from bot.database.connection import Engine, Base
 
 
 class User(Base):
@@ -16,5 +11,4 @@ class User(Base):
 
 
 if __name__ == "__main__":
-    metadata = MetaData()
     Base.metadata.create_all(bind=Engine)

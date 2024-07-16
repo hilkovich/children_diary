@@ -1,12 +1,8 @@
-from sqlalchemy import Column, Integer, DateTime, ForeignKey, MetaData, String
-from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, String
+from sqlalchemy.orm import relationship
 
-from bot.database.connection import Engine
+from bot.database.connection import Engine, Base
 from bot.models.users import User
-
-
-class Base(DeclarativeBase):
-    pass
 
 
 class Book(Base):
@@ -14,17 +10,16 @@ class Book(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey(User.telegram_id))
     user = relationship(User)
-    data_book = Column(DateTime)
-    book_num = Column(Integer)
-    book_name = Column(String)
+    created_on = Column(DateTime)
+    num_book = Column(Integer)
+    name_book = Column(String)
 
     def __str__(self):
-        return f"{self.book_num}. {self.book_name}"
+        return f"{self.num_book}. {self.name_book}"
 
     def __repr__(self):
-        return f"{self.book_num}. {self.book_name}"
+        return f"{self.num_book}. {self.name_book}"
 
 
 if __name__ == "__main__":
-    metadata = MetaData()
     Base.metadata.create_all(bind=Engine)
