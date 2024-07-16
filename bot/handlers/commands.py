@@ -6,8 +6,8 @@ from aiogram.filters.command import Command
 from bot.keyboards.history import kb_first_story
 from bot.keyboards import kb_show_book
 from bot.utils import ProcessImageStates
-from bot.repository import get_user, add_user
-from bot.repository import get_all_book
+from bot.queries import get_user, add_user
+from bot.queries import get_all_book
 
 router = Router()
 

@@ -5,14 +5,14 @@ from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.fsm.context import FSMContext
 
 from bot.keyboards import kb_new_book
-from bot.repository import (
+from bot.queries import (
     add_book,
     get_num_book,
     get_all_book,
     get_one_book,
     get_name_book,
 )
-from bot.repository import add_history, get_all_history
+from bot.queries import add_history, get_all_history
 from bot.utils import ProcessBookStates
 
 router = Router()

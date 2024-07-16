@@ -5,11 +5,11 @@ from aiogram import Bot, Dispatcher
 
 from bot.utils.commands import set_commands
 from bot.handlers import history
-from bot.handlers import books, command
+from bot.handlers import books, commands
 
 load_dotenv()
 
-bot = Bot(token=os.getenv("TG_TOKEN"))
+bot = Bot(token=os.getenv("TG_BOT_TOKEN"))
 dp = Dispatcher()
 
 
@@ -21,9 +21,9 @@ async def start():
         await bot.session.close()
 
 
-dp.include_router(command.router)
-dp.include_router(history.router)
+dp.include_router(commands.router)
 dp.include_router(books.router)
+dp.include_router(history.router)
 
 
 if __name__ == "__main__":
