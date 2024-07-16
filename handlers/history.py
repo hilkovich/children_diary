@@ -1,3 +1,7 @@
+import os
+import json
+import aio_pika
+from dotenv import load_dotenv
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
@@ -6,6 +10,12 @@ from utils.states import ProcessImageStates
 from repository.history import add_history
 from keyboards.history import kb_create_story, kb_save_story, kb_repeat_story
 from repository.prediction import gen_captions, gen_story, gen_message
+
+load_dotenv()
+
+username = os.getenv("RABBIT_USER")
+password = os.getenv("RABBIT_PASSWORD")
+host = os.getenv("RABBIT_HOST")
 
 router = Router()
 
@@ -54,12 +64,30 @@ async def cmn_process_text(message: Message, state: FSMContext):
 async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("Создаю историю...")
     data = await state.get_data()
-    captions = gen_captions(data["photos"])
-    msg = gen_message(captions, data["descript"])
-    history = gen_story(msg).replace("\n\n", "\n")
-    await state.update_data(history=history)
-    await state.update_data(captions=captions)
-    await callback.message.answer(f"{history}", reply_markup=kb_save_story())
+
+    # Подключение к RabbitMQ
+    connection = await aio_pika.connect_robust(f"amqp://{username}:{password}@{host}/")
+    async with connection:
+        channel = await connection.channel()
+        queue = await channel.declare_queue("Очередь генерации истории")
+
+        # Отправка данных в очередь RabbitMQ
+        await channel.default_exchange.publish(
+            aio_pika.Message(body=json.dumps(data["photos"]).encode()),
+            routing_key="Очередь генерации истории",
+        )
+
+        # Ожидание ответа с результатом captions
+        async for message in queue:
+            async with message.process():
+                captions = gen_captions(json.loads(message.body))
+                msg = gen_message(captions, data["descript"])
+                history = gen_story(msg).replace("\n\n", "\n")
+                await state.update_data(history=history)
+                await state.update_data(captions=captions)
+                await callback.message.answer(
+                    f"{history}", reply_markup=kb_save_story()
+                )
 
 
 @router.callback_query(F.data == "repeat_story")
