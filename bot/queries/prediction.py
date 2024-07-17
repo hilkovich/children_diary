@@ -3,41 +3,42 @@ import json
 import requests
 from PIL import Image
 from dotenv import load_dotenv
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import BlipProcessor, BlipForConditionalGeneration
 
 load_dotenv()
-TG_TOKEN = os.getenv("TG_TOKEN")
-ID_CATALOG_YANDEX = os.environ["ID_CATALOG_YANDEX"]
-API_KEY_YANDEX = os.environ["API_KEY_YANDEX"]
 
-model_name = "notebooks/models/git-base-train"
-processor = AutoProcessor.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
+YANDEX_ID_CATALOG = os.environ["YANDEX_ID_CATALOG"]
+YANDEX_API_KEY = os.environ["YANDEX_API_KEY"]
 
 
+name_model = "abhijit2111/Pic2Story"
+processor = BlipProcessor.from_pretrained(name_model)
+model = BlipForConditionalGeneration.from_pretrained(name_model)
+
+
+# Генерация URL адресов загруженных изображений в TG
 def tg_photo_url(photo_file_id: str):
-    url = f"https://api.telegram.org/bot{TG_TOKEN}/getFile?file_id={photo_file_id}"
+    url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/getFile?file_id={photo_file_id}"
     file_path = requests.get(url).json()["result"]["file_path"]
-    photo_url = f"https://api.telegram.org/file/bot{TG_TOKEN}/{file_path}"
+    photo_url = f"https://api.telegram.org/file/bot{TG_BOT_TOKEN}/{file_path}"
     return photo_url
 
 
-def gen_captions(photos: dict):
+def prediction_captions(photo_url: dict):
     captions = []
 
-    for image in photos:
+    for image in photo_url:
         image = Image.open(requests.get(tg_photo_url(image), stream=True).raw)
-        pixel_values = processor(images=image, return_tensors="pt").pixel_values
-        generated_ids = model.generate(pixel_values=pixel_values, max_length=50)
-        caption = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-        captions.append(caption)
-
+        inputs = processor(image, return_tensors="pt")
+        out = model.generate(**inputs)
+        captions.append(processor.decode(out[0], skip_special_tokens=True))
     return captions
 
 
-def gen_story(message: str):
+def prediction_history(message: str):
     prompt = {
-        "modelUri": f"gpt://{ID_CATALOG_YANDEX}/yandexgpt/latest",
+        "modelUri": f"gpt://{YANDEX_ID_CATALOG}/yandexgpt/latest",
         "completionOptions": {"stream": False, "temperature": 0.6, "maxTokens": "2000"},
         "messages": [
             {
@@ -54,7 +55,7 @@ def gen_story(message: str):
     url = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Api-Key {API_KEY_YANDEX}",
+        "Authorization": f"Api-Key {YANDEX_API_KEY}",
     }
 
     response = requests.post(url, headers=headers, json=prompt)
@@ -63,14 +64,13 @@ def gen_story(message: str):
     return result["result"]["alternatives"][0]["message"]["text"]
 
 
-def gen_message(captions, descript: str):
-    setup_input = "В тексте не использовать слова фотография, изображение, затем"
+def instructions_history(photo_captions, photo_description: str):
+    setup_input = "В тексте не использовать слова: фотография, изображение, затем"
 
     message = f"""
-            Напиши развернутое описание от первого лица происходящего на {len(captions)} фотографиях объединив в сюжет.
-            Описания фотографий: {captions}.
-            Дополнительное описание к фотографий: {descript}.
+            Напиши развернутое описание от первого лица происходящего на {len(photo_captions)} фотографиях объединив в сюжет.
+            Подписи к фотографиям: {photo_captions}.
+            Описание событий, происходящих на фотографиях: {photo_description}.
             Дополнительные требования: {setup_input}.
             """
-
     return message
