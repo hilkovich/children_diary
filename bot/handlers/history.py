@@ -68,7 +68,7 @@ async def cmn_get_user_text(message: Message, state: FSMContext):
         await state.set_state(ProcessImageStates.addText)
 
 
-@router.callback_query(F.data == "create_story")
+@router.callback_query(F.data == "create_history")
 async def cmn_create_history(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("Создаю историю...")
     data = await state.get_data()
@@ -77,12 +77,12 @@ async def cmn_create_history(callback: CallbackQuery, state: FSMContext):
     connection = await aio_pika.connect_robust(f"amqp://{username}:{password}@{host}/")
     async with connection:
         channel = await connection.channel()
-        queue = await channel.declare_queue("Очередь генерации истории")
+        queue = await channel.declare_queue("queue_generation_history")
 
         # Отправка данных в очередь RabbitMQ
         await channel.default_exchange.publish(
-            aio_pika.Message(body=json.dumps(data["photos"]).encode()),
-            routing_key="Очередь генерации истории",
+            aio_pika.Message(body=json.dumps(data["photo_file_id"]).encode()),
+            routing_key="queue_generation_history",
         )
 
         # Получение данных из очереди RabbitMQ

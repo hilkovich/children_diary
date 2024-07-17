@@ -65,7 +65,10 @@ def prediction_history(message: str):
 
 
 def instructions_history(photo_captions, photo_description: str):
-    setup_input = "В тексте не использовать слова: фотография, изображение, затем"
+    setup_input = (
+        "В тексте не использовать слова: фотография, изображение, затем. "
+        "Исключить слова и их синонимы: арафед, arafed. Исключить добавление заголовка."
+    )
 
     message = f"""
             Напиши развернутое описание от первого лица происходящего на {len(photo_captions)} фотографиях объединив в сюжет.

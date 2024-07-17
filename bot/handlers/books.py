@@ -38,7 +38,7 @@ async def cmn_create_book(message: Message, state: FSMContext):
         data = await state.get_data()
 
         add_new_book(message.from_user.id, message.text)
-        num_book = get_num_book(message.from_user.id).book_num
+        num_book = get_num_book(message.from_user.id).num_book
         add_new_history(
             message.from_user.id,
             data["photo_captions"],
@@ -71,7 +71,7 @@ async def cmn_num_book(callback: CallbackQuery, state: FSMContext):
 async def cmn_save_book(message: Message, state: FSMContext):
     if re.findall(r"\d+", message.text):
         last_book = get_num_book(message.from_user.id)
-        if last_book.book_num < int(message.text) or int(message.text) == 0:
+        if last_book.num_book < int(message.text) or int(message.text) == 0:
             await message.answer("Такой книги не существует")
             await state.set_state(ProcessBookStates.numBook)
         else:
@@ -103,13 +103,13 @@ async def cmn_num_download_book(callback: CallbackQuery, state: FSMContext):
 async def cmn_download_book(message: Message, state: FSMContext):
     if re.findall(r"\d+", message.text):
         last_book = get_num_book(message.from_user.id)
-        if last_book.book_num < int(message.text) or int(message.text) == 0:
+        if last_book.num_book < int(message.text) or int(message.text) == 0:
             await message.answer("Такой книги не существует")
             await state.set_state(ProcessBookStates.allBook)
         else:
             books = get_successful_save_history(message.from_user.id, int(message.text))
             create_file_book(message.from_user.id, int(message.text), books)
-            name_book = get_name_book(message.from_user.id, int(message.text)).book_name
+            name_book = get_name_book(message.from_user.id, int(message.text)).name_book
 
             dir_file = f"{message.from_user.id}_{int(message.text)}.docx"
             file_book = FSInputFile(path=dir_file, filename=name_book)
