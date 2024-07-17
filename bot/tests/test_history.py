@@ -1,16 +1,18 @@
 import pytest
 
-from bot.queries.history import add_history, get_all_history
+from bot.queries.history import add_new_history, get_successful_save_history
 
 
-def test_add_history():
+def test_add_new_history():
     telegram_id = 123058345
-    photo_caption = "Тестовое описание фотографий"
-    photo_descript = "Тестовое примечание"
-    photo_story = "Тестовая история"
-    book_id = 12
-    add_history(telegram_id, photo_caption, photo_descript, photo_story, book_id, 1)
-    all_history = get_all_history(telegram_id, book_id)
+    photo_captions = "Тестовое описание фотографий"
+    photo_description = "Тестовое примечание к фотографиям"
+    history = "Тестовая история"
+    num_book = 12
+    add_new_history(
+        telegram_id, photo_captions, photo_description, history, num_book, 1
+    )
+    all_history = get_successful_save_history(telegram_id, num_book)
     assert len(all_history) == 1
 
 

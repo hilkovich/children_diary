@@ -1,10 +1,10 @@
 import pytest
 
-from bot.queries.users import add_user, get_user
+from bot.queries.users import add_new_user, get_user
 
 
-def test_add_user():
-    add_user(123058345)
+def test_add_new_user():
+    add_new_user(123058345)
     user = get_user(123058345)
     assert user.telegram_id == 123058345
 
