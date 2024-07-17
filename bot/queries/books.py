@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from bot.database.connection import SessionLocal
-from bot.models.books import Book
+from database.connection import SessionLocal
+from models.books import Book
 
 
 def get_num_book(telegram_id):

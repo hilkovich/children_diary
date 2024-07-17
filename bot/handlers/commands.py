@@ -3,11 +3,11 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
-from bot.utils.states import ProcessImageStates
-from bot.keyboards.history import kb_first_history
-from bot.keyboards.books import kb_download_book
-from bot.queries.users import add_new_user, get_user
-from bot.queries.books import get_all_book
+from utils.states import ProcessImageStates
+from keyboards.history import kb_first_history
+from keyboards.books import kb_download_book
+from queries.users import add_new_user, get_user
+from queries.books import get_all_book
 
 router = Router()
 

@@ -1,6 +1,9 @@
 from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy.orm import declarative_base
 
-from bot.database.connection import Engine, Base
+from database.connection import Engine
+
+Base = declarative_base()
 
 
 class User(Base):
@@ -10,5 +13,4 @@ class User(Base):
     created_on = Column(DateTime)
 
 
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=Engine)
+Base.metadata.create_all(bind=Engine)

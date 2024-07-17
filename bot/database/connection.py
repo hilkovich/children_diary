@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
 
 
 load_dotenv()
@@ -15,5 +15,3 @@ database = os.getenv("POSTGRES_DATABASE")
 Engine = create_engine(f"postgresql://{username}:{password}@{host}:{port}/{database}")
 
 SessionLocal = sessionmaker(bind=Engine)
-
-Base = declarative_base()

@@ -1,6 +1,6 @@
 import pytest
 
-from bot.queries.books import get_num_book, add_new_book, get_name_book
+from queries.books import get_num_book, add_new_book, get_name_book
 
 
 def test_add_new_book():

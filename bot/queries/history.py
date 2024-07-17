@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from bot.database.connection import SessionLocal
-from bot.models.history import History
+from database.connection import SessionLocal
+from models.history import History
 
 
 def add_new_history(

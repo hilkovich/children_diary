@@ -1,6 +1,6 @@
 import pytest
 
-from bot.queries.history import add_new_history, get_successful_save_history
+from queries.history import add_new_history, get_successful_save_history
 
 
 def test_add_new_history():

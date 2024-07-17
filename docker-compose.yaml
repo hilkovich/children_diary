@@ -11,6 +11,7 @@ services:
       - .env
 
   rabbitmq:
+    container_name: rabbitmq_child_diary
     image: rabbitmq:3.13.4-management
     hostname: rabbitmq
     environment:

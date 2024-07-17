@@ -1,6 +1,6 @@
 import pytest
 
-from bot.queries.users import add_new_user, get_user
+from queries.users import add_new_user, get_user
 
 
 def test_add_new_user():

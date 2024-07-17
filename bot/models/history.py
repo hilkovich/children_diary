@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_base
 
-from bot.database.connection import Engine, Base
-from bot.models.users import User
+from models.users import User
+from database.connection import Engine
+
+Base = declarative_base()
 
 
 class History(Base):
@@ -24,5 +26,4 @@ class History(Base):
         return f"{self.history}"
 
 
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=Engine)
+Base.metadata.create_all(bind=Engine)

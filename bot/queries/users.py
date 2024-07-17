@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from bot.database.connection import SessionLocal
-from bot.models.users import User
+from database.connection import SessionLocal
+from models.users import User
 
 
 def add_new_user(telegram_id):
