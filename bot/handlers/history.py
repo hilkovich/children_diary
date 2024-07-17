@@ -6,10 +6,18 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from bot.utils import ProcessImageStates
-from bot.queries import add_history
-from bot.keyboards.history import kb_create_story, kb_save_story, kb_repeat_story
-from bot.queries import gen_captions, gen_story, gen_message
+from bot.utils.states import ProcessImageStates
+from bot.queries.history import add_new_history
+from bot.keyboards.history import (
+    kb_create_history,
+    kb_save_repeat_history,
+    kb_repeat_history,
+)
+from bot.queries.prediction import (
+    prediction_captions,
+    prediction_history,
+    instructions_history,
+)
 
 load_dotenv()
 
@@ -20,24 +28,24 @@ host = os.getenv("RABBIT_HOST")
 router = Router()
 
 
-@router.callback_query(F.data == "new_story")
-async def cmn_new_story(callback: CallbackQuery, state: FSMContext):
+@router.callback_query(F.data == "new_history")
+async def cmn_new_history(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(
         "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
     )
     await callback.message.answer(
-        "➤ Затем опишите события, которые на них происходят. Например: Первый день летних каникул Кристины 7 лет."
+        "➤ Затем опишите события, которые на них происходят. Пример: Семейная прогулка по парку возле дома с пикником с бабушкой и детьми Полиной 2 года и Максимом 7 лет."
     )
-    await state.update_data(photos=[])
+    await state.update_data(photo_file_id=[])
     await state.set_state(ProcessImageStates.addImage)
 
 
 @router.message(ProcessImageStates.addImage)
-async def cmn_process_images(message: Message, state: FSMContext):
+async def cmn_get_user_photo(message: Message, state: FSMContext):
     if message.content_type == "photo":
         data = await state.get_data()
-        if len(data["photos"]) < 20:
-            data["photos"].append(message.photo[-1].file_id)
+        if len(data["photo_file_id"]) < 20:
+            data["photo_file_id"].append(message.photo[-1].file_id)
         else:
             await message.answer("Вы загрузили максимальное количество фотографий")
         await state.set_state(ProcessImageStates.addText)
@@ -47,11 +55,11 @@ async def cmn_process_images(message: Message, state: FSMContext):
 
 
 @router.message(ProcessImageStates.addText)
-async def cmn_process_text(message: Message, state: FSMContext):
+async def cmn_get_user_text(message: Message, state: FSMContext):
     if message.content_type != "photo":
-        await state.update_data(descript=message.text)
+        await state.update_data(photo_description=message.text)
         await message.answer(
-            "Давайте создадим новую историю 🤩", reply_markup=kb_create_story()
+            "Давайте создадим новую историю 🤩", reply_markup=kb_create_history()
         )
     else:
         await message.answer(
@@ -61,7 +69,7 @@ async def cmn_process_text(message: Message, state: FSMContext):
 
 
 @router.callback_query(F.data == "create_story")
-async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
+async def cmn_create_history(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("Создаю историю...")
     data = await state.get_data()
 
@@ -77,31 +85,31 @@ async def cmn_create_story(callback: CallbackQuery, state: FSMContext):
             routing_key="Очередь генерации истории",
         )
 
-        # Ожидание ответа с результатом captions
+        # Получение данных из очереди RabbitMQ
         async for message in queue:
             async with message.process():
-                captions = gen_captions(json.loads(message.body))
-                msg = gen_message(captions, data["descript"])
-                history = gen_story(msg).replace("\n\n", "\n")
+                photo_captions = prediction_captions(json.loads(message.body))
+                msg = instructions_history(photo_captions, data["photo_description"])
+                history = prediction_history(msg).replace("\n\n", "\n")
                 await state.update_data(history=history)
-                await state.update_data(captions=captions)
+                await state.update_data(photo_captions=photo_captions)
                 await callback.message.answer(
-                    f"{history}", reply_markup=kb_save_story()
+                    f"{history}", reply_markup=kb_save_repeat_history()
                 )
 
 
-@router.callback_query(F.data == "repeat_story")
-async def cmn_repeat_story(callback: CallbackQuery, state: FSMContext):
+@router.callback_query(F.data == "repeat_history")
+async def cmn_repeat_history(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    add_history(
+    add_new_history(
         callback.from_user.id,
-        data["captions"],
-        data["descript"],
+        data["photo_captions"],
+        data["photo_description"],
         data["history"],
         None,
         0,
     )
     await callback.message.answer(
         "Жаль, что вам не понравилась история 🥺\nСделаем новую?",
-        reply_markup=kb_repeat_story(),
+        reply_markup=kb_repeat_history(),
     )

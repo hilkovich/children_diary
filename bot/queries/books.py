@@ -54,7 +54,7 @@ def get_name_book(telegram_id, num_book):
         )
 
 
-def get_full_book(telegram_id, num_book, history):
+def create_file_book(telegram_id, num_book, history):
     with open(f"{telegram_id}_{num_book}.docx", "w", encoding="utf-8") as file:
         lines = [
             f"Глава №{i + 1}\n\n{chapter}\n\n" for i, chapter in enumerate(history)

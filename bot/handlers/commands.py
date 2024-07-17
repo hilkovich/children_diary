@@ -3,11 +3,11 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
-from bot.keyboards.history import kb_first_story
-from bot.keyboards import kb_show_book
-from bot.utils import ProcessImageStates
-from bot.queries import get_user, add_user
-from bot.queries import get_all_book
+from bot.utils.states import ProcessImageStates
+from bot.keyboards.history import kb_first_history
+from bot.keyboards.books import kb_download_book
+from bot.queries.users import add_new_user, get_user
+from bot.queries.books import get_all_book
 
 router = Router()
 
@@ -16,7 +16,7 @@ router = Router()
 async def cmd_start(message: Message):
     user = get_user(message.from_user.id)
     if user is None:
-        add_user(message.from_user.id)
+        add_new_user(message.from_user.id)
     msg = (
         "Привет 👋\n"
         "Я — ботик, умею создавать и вести книги с индивидуальной историей ребенка.\n\n"
@@ -29,22 +29,22 @@ async def cmd_start(message: Message):
         "➤  скачивать книги, чтобы распечатать их или поделиться;\n"
         "➤  отправлять книги в социальные сети и мессенджеры."
     )
-    await message.answer(msg, reply_markup=kb_first_story())
+    await message.answer(msg, reply_markup=kb_first_history())
 
 
 @router.message(Command("new"))
-async def cmn_new_story(message: Message, state: FSMContext):
+async def cmn_add_new_history(message: Message, state: FSMContext):
     await message.answer(
         "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
     )
     await message.answer(
-        "➤ Затем опишите события, которые на них происходят. Например: Первый день летних каникул Кристины 7 лет."
+        "➤ Затем опишите события, которые на них происходят. Пример: Семейная прогулка по парку возле дома с пикником с бабушкой и детьми Полиной 2 года и Максимом 7 лет."
     )
-    await state.update_data(photos=[])
+    await state.update_data(photo_file_id=[])
     await state.set_state(ProcessImageStates.addImage)
 
 
 @router.message(Command("books"))
-async def cmn_all_books(message: Message):
+async def cmn_get_all_book(message: Message):
     books = get_all_book(message.from_user.id)
-    await message.answer(f"Доступные книги:\n{books}", reply_markup=kb_show_book())
+    await message.answer(f"Доступные книги:\n{books}", reply_markup=kb_download_book())
