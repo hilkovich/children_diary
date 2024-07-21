@@ -29,7 +29,7 @@ router = Router()
 @router.callback_query(F.data == "new_history")
 async def cmn_new_history(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(
-        "➤ Сперва загрузите до 20 детских фотографий в хронологическом порядке"
+        "➤ Сперва загрузите до 5 детских фотографий в хронологическом порядке"
     )
     await callback.message.answer(
         "➤ Затем опишите события, которые на них происходят. Пример: Семейная прогулка по парку возле дома с пикником с бабушкой и детьми Полиной 2 года и Максимом 7 лет."
@@ -42,7 +42,7 @@ async def cmn_new_history(callback: CallbackQuery, state: FSMContext):
 async def cmn_get_user_photo(message: Message, state: FSMContext):
     if message.content_type == "photo":
         data = await state.get_data()
-        if len(data["photo_file_id"]) < 20:
+        if len(data["photo_file_id"]) < 5:
             data["photo_file_id"].append(message.photo[-1].file_id)
         else:
             await message.answer("Вы загрузили максимальное количество фотографий")
