@@ -6,11 +6,8 @@ from aiogram.fsm.context import FSMContext
 
 from utils.states import ProcessBookStates
 from keyboards.books import kb_create_save_book
-from queries.history import (
-    add_new_history,
-    get_successful_save_history,
-    kb_new_history,
-)
+from keyboards.history import kb_new_history
+from queries.history import add_new_history, get_successful_save_history
 from queries.books import (
     add_new_book,
     get_num_book,
