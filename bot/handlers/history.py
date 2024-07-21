@@ -29,10 +29,11 @@ router = Router()
 @router.callback_query(F.data == "new_history")
 async def cmn_new_history(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer(
-        "➤ Сперва загрузите до 5 детских фотографий в хронологическом порядке"
+        "➤ Сперва загрузите от 2 до 5 детских фотографий в хронологическом порядке в рамках одного дня"
     )
     await callback.message.answer(
-        "➤ Затем опишите события, которые на них происходят. Пример: Семейная прогулка по парку возле дома с пикником с бабушкой и детьми Полиной 2 года и Максимом 7 лет."
+        "➤ Затем опишите события, которые на них происходят.\n"
+        "Пример: Семейная прогулка по парку возле дома с пикником с бабушкой и детьми Полиной 2 года и Максимом 7 лет."
     )
     await state.update_data(photo_file_id=[])
     await state.set_state(ProcessImageStates.addImage)
