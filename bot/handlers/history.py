@@ -58,7 +58,8 @@ async def cmn_get_user_text(message: Message, state: FSMContext):
         await state.update_data(photo_description=message.text)
         await message.answer(
             "Давайте создадим новую историю 🤩\n\n"
-            "Создание займет не более 20 секунд", reply_markup=kb_create_history()
+            "Создание займет не более 20 секунд",
+            reply_markup=kb_create_history(),
         )
     else:
         await message.answer(
