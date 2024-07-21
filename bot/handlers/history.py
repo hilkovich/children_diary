@@ -57,7 +57,8 @@ async def cmn_get_user_text(message: Message, state: FSMContext):
     if message.content_type != "photo":
         await state.update_data(photo_description=message.text)
         await message.answer(
-            "Давайте создадим новую историю 🤩", reply_markup=kb_create_history()
+            "Давайте создадим новую историю 🤩\n\n"
+            "Создание займет не более 20 секунд", reply_markup=kb_create_history()
         )
     else:
         await message.answer(
@@ -68,7 +69,7 @@ async def cmn_get_user_text(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "create_history")
 async def cmn_create_history(callback: CallbackQuery, state: FSMContext):
-    await callback.message.answer("Создаю историю...")
+    await callback.message.answer("Тружусь над историей, скоро будет готово...")
     data = await state.get_data()
 
     photo_captions = prediction_captions(data["photo_file_id"])
