@@ -47,3 +47,14 @@ def kb_repeat_history():
         ]
     ]
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def kb_next_history():
+    buttons = [
+        [
+            types.InlineKeyboardButton(
+                text="Создать новую историю", callback_data="new_history"
+            ),
+        ]
+    ]
+    return types.InlineKeyboardMarkup(inline_keyboard=buttons)

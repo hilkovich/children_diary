@@ -6,7 +6,11 @@ from aiogram.fsm.context import FSMContext
 
 from utils.states import ProcessBookStates
 from keyboards.books import kb_create_save_book
-from queries.history import add_new_history, get_successful_save_history
+from queries.history import (
+    add_new_history,
+    get_successful_save_history,
+    kb_next_history,
+)
 from queries.books import (
     add_new_book,
     get_num_book,
@@ -49,7 +53,10 @@ async def cmn_create_book(message: Message, state: FSMContext):
         )
 
         await state.clear()
-        await message.answer("Вы создали новую книгу и сохранили историю 🎉")
+        await message.answer(
+            "Вы создали новую книгу и сохранили историю 🎉",
+            reply_markup=kb_next_history(),
+        )
     else:
         await message.answer("Слишком длинное название книги")
         await state.set_state(ProcessBookStates.addBook)
@@ -87,7 +94,7 @@ async def cmn_save_book(message: Message, state: FSMContext):
             )
 
             await state.clear()
-            await message.answer("История сохранена 🎉")
+            await message.answer("История сохранена 🎉", reply_markup=kb_next_history())
     else:
         await message.answer("Необходимо указать номер книги")
         await state.set_state(ProcessBookStates.numBook)
