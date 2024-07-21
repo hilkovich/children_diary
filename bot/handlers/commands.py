@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters.command import Command
 
 from utils.states import ProcessImageStates
-from keyboards.history import kb_first_history
+from keyboards.history import kb_new_history, kb_help
 from keyboards.books import kb_download_book
 from queries.users import add_new_user, get_user
 from queries.books import get_all_book
@@ -29,7 +29,7 @@ async def cmd_start(message: Message):
         "➤  скачивать книги, чтобы распечатать их или поделиться;\n"
         "➤  отправлять книги в социальные сети и мессенджеры."
     )
-    await message.answer(msg, reply_markup=kb_first_history())
+    await message.answer(msg, reply_markup=kb_help())
 
 
 @router.message(Command("new"))
@@ -48,3 +48,20 @@ async def cmn_add_new_history(message: Message, state: FSMContext):
 async def cmn_get_all_book(message: Message):
     books = get_all_book(message.from_user.id)
     await message.answer(f"Доступные книги:\n{books}", reply_markup=kb_download_book())
+
+
+@router.message(Command("help"))
+async def cmn_help_use(message: Message):
+    msg = (
+        "Создание истории\n"
+        "➤ Для создания новой истории воспользуйтесь меню или кнопкой создания истории\n"
+        "➤ Сперва загрузите от 2 до 5 детских фотографий в хронологическом порядке в рамках одного дня\n"
+        "➤ На этапе загрузки фотографий не указывайте описания!\n"
+        "➤ После загрузки фотографий опишите события, которые на них происходят\n"
+        "➤ Описание должно содержать главные моменты, которые стоит учесть при составлении истории\n\n"
+        "Доп функции\n"
+        "➤ Создание книг под значимые мометы и сохранение в них историй\n"
+        "➤ Для повтора инструкции по использованию ботика воспользуйтесь меню\n"
+        "➤ Для просмотра сохраненных книг и их скачивания воспользуйтесь меню"
+    )
+    await message.answer(msg, reply_markup=kb_new_history())

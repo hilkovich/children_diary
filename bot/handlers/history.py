@@ -45,7 +45,11 @@ async def cmn_get_user_photo(message: Message, state: FSMContext):
         if len(data["photo_file_id"]) < 5:
             data["photo_file_id"].append(message.photo[-1].file_id)
         else:
-            await message.answer("Вы загрузили максимальное количество фотографий")
+            await message.answer(
+                "Вы загрузили максимальное количество фотографий\n"
+                "Для истории будет использованы первые 5 фотографий\n"
+                "Сейчас необходимо описать события, которые происходят на фотографиях"
+            )
         await state.set_state(ProcessImageStates.addText)
     else:
         await message.answer("Сейчас необходимо загрузить фотографии")
