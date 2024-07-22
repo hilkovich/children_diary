@@ -68,9 +68,11 @@ def prediction_history(message: str):
 
 
 def instructions_history(photo_captions, photo_description: str):
+    setup_input = "Запрещено выводить примечания"
     message = f"""
             Напиши развернутое описание от первого лица происходящего на {len(photo_captions)} фотографиях объединив в сюжет.
             Подписи к фотографиям: {photo_captions}.
             Описание событий, происходящих на фотографиях: {photo_description}.
+            Дополнительные требования: {setup_input}.
             """
     return message
