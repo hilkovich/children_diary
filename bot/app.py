@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
 from utils.commands import set_commands
-from handlers import history
-from handlers import books, commands
+from handlers import books, commands, history, help
 
 load_dotenv()
 
@@ -22,6 +21,7 @@ async def start():
 
 
 dp.include_router(commands.router)
+dp.include_router(help.router)
 dp.include_router(books.router)
 dp.include_router(history.router)
 

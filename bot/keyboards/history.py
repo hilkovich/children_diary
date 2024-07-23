@@ -1,11 +1,22 @@
 from aiogram import types
 
 
-def kb_first_history():
+def kb_help():
     buttons = [
         [
             types.InlineKeyboardButton(
-                text="Создать первую историю", callback_data="new_history"
+                text="Как пользоваться ботиком", callback_data="help_use"
+            ),
+        ]
+    ]
+    return types.InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def kb_new_history():
+    buttons = [
+        [
+            types.InlineKeyboardButton(
+                text="Создать новую историю", callback_data="new_history"
             ),
         ]
     ]

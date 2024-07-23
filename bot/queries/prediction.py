@@ -1,5 +1,6 @@
 import os
 import json
+import torch
 import requests
 from PIL import Image
 from dotenv import load_dotenv
@@ -13,8 +14,9 @@ YANDEX_API_KEY = os.environ["YANDEX_API_KEY"]
 
 
 name_model = "abhijit2111/Pic2Story"
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 processor = BlipProcessor.from_pretrained(name_model)
-model = BlipForConditionalGeneration.from_pretrained(name_model)
+model = BlipForConditionalGeneration.from_pretrained(name_model).to(device)
 
 
 # Генерация URL адресов загруженных изображений в TG
@@ -30,7 +32,7 @@ def prediction_captions(photo_url: dict):
 
     for image in photo_url:
         image = Image.open(requests.get(tg_photo_url(image), stream=True).raw)
-        inputs = processor(image, return_tensors="pt")
+        inputs = processor(image, return_tensors="pt").to(device)
         out = model.generate(**inputs)
         captions.append(processor.decode(out[0], skip_special_tokens=True))
     return captions
@@ -43,7 +45,8 @@ def prediction_history(message: str):
         "messages": [
             {
                 "role": "system",
-                "text": "Ты русский писатель детских рассказов. Всегда возвращаешь текст только на русском.",
+                "text": "Ты русский писатель детских рассказов. Всегда возвращаешь текст только на русском."
+                "В тексте запрещено использовать: фотография, изображение, затем, фото, арафед, arafed, развернутое, описание, *, #",
             },
             {
                 "role": "user",
@@ -65,11 +68,7 @@ def prediction_history(message: str):
 
 
 def instructions_history(photo_captions, photo_description: str):
-    setup_input = (
-        "В тексте не использовать слова: фотография, изображение, затем. "
-        "Исключить слова и их синонимы: арафед, arafed. Исключить добавление заголовка."
-    )
-
+    setup_input = "Запрещено выводить примечания"
     message = f"""
             Напиши развернутое описание от первого лица происходящего на {len(photo_captions)} фотографиях объединив в сюжет.
             Подписи к фотографиям: {photo_captions}.
