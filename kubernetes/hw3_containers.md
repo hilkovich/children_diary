@@ -10,22 +10,22 @@
 - Ответы на доп. вопросы
 
 ### Запуск minikube
-![Запуск minikube](kubernetes/images/image_1.png)
+![Запуск minikube](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_1.png)
 
 ### Проверка контейнера и файла конфигурации
-![Проверка контейнера и файла конфигурации](kubernetes/images/image_2.png)
+![Проверка контейнера и файла конфигурации](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_2.png)
 
 ### Создание объектов из манифестов
-![Создание объектов из манифестов](kubernetes/images/image_3.png)
+![Создание объектов из манифестов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_3.png)
 
 ### Проверка созданных ресурсов
-![Проверка созданных ресурсов](kubernetes/images/image_4.png)
+![Проверка созданных ресурсов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_4.png)
 
 ### Проверка логов nextcloud
-![Проверка логов nextcloud](kubernetes/images/image_5.png)
+![Проверка логов nextcloud](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_5.png)
 
 ### Создание service для nextcloud c перенаправлением портов
-![Создание service для nextcloud c перенаправлением портов](kubernetes/images/image_6.png)
+![Создание service для nextcloud c перенаправлением портов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_6.png)
 
 ## Вопросы
 1. **Важен ли порядок выполнения этих манифестов? Почему?**
