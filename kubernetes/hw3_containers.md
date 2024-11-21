@@ -9,7 +9,7 @@
 - README.md с описанием хода работы и скриншотами
 - Ответы на доп. вопросы
 
-### Запуск minikube
+### Запуск minikube Linux
 ![Запуск minikube](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_1.png)
 
 ### Проверка контейнера и файла конфигурации
@@ -26,6 +26,11 @@
 
 ### Создание service для nextcloud c перенаправлением портов
 ![Создание service для nextcloud c перенаправлением портов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_6.png)
+
+### Туннелирование трафика между minikube и Сервисом
+![Туннелирование трафика между minikube и Сервисом](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_7.png)
+
+Не удалось решить проблему на Linux. Буду признателен за обратную связть по решению проблемы.
 
 ## Вопросы
 1. **Важен ли порядок выполнения этих манифестов? Почему?**
