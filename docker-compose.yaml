@@ -1,4 +1,12 @@
 services:
+  init:
+    container_name: init_child_diary
+    image: python:3.12
+    command: ["sh", "-c", "echo 'Инициализация приложения...'; sleep 5; echo 'Инициализация завершена'"]
+    restart: "no"
+    networks:
+      - child_diary_network
+
   postgres:
     container_name: postgres_child_diary
     ports:
