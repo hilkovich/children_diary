@@ -9,28 +9,32 @@
 - README.md с описанием хода работы и скриншотами
 - Ответы на доп. вопросы
 
-### Запуск minikube Linux
-![Запуск minikube](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_1.png)
+### Запуск minikube
+![Запуск minikube](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w1.png)
 
 ### Проверка контейнера и файла конфигурации
-![Проверка контейнера и файла конфигурации](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_2.png)
+![Проверка контейнера и файла конфигурации](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w2.png)
 
 ### Создание объектов из манифестов
-![Создание объектов из манифестов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_3.png)
+![Создание объектов из манифестов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w3.png)
 
 ### Проверка созданных ресурсов
-![Проверка созданных ресурсов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_4.png)
+![Проверка созданных ресурсов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w4.png)
 
 ### Проверка логов nextcloud
-![Проверка логов nextcloud](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_5.png)
+![Проверка логов nextcloud](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w5.png)
 
 ### Создание service для nextcloud c перенаправлением портов
-![Создание service для nextcloud c перенаправлением портов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_6.png)
+![Создание service для nextcloud c перенаправлением портов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w6.png)
 
 ### Туннелирование трафика между minikube и Сервисом
-![Туннелирование трафика между minikube и Сервисом](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_7.jpg)
+![Туннелирование трафика между minikube и Сервисом](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w7.png)
 
-Не удалось решить проблему на Linux. Буду признателен за обратную связть по решению проблемы.
+### Запущенный nextcloud
+![Запущенный nextcloud](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w8.png)
+
+### Дашборд
+![Дашборд](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_w9.png)
 
 ## Вопросы
 1. **Важен ли порядок выполнения этих манифестов? Почему?**
