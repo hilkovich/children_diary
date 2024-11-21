@@ -28,7 +28,7 @@
 ![Создание service для nextcloud c перенаправлением портов](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_6.png)
 
 ### Туннелирование трафика между minikube и Сервисом
-![Туннелирование трафика между minikube и Сервисом](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_7.png)
+![Туннелирование трафика между minikube и Сервисом](https://github.com/hilkovich/children_diary/blob/hw3_containers/kubernetes/images/image_7.jpg)
 
 Не удалось решить проблему на Linux. Буду признателен за обратную связть по решению проблемы.
 
