@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot-app
+  template:
+    metadata:
+      labels:
+        app: bot-app
+    spec:
+      containers:
+        - name: bot
+          image: bot:latest
+          imagePullPolicy: Never
+          command: ["python", "app.py"]
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+      initContainers:
+        - name: init-python
+          image: latest
+          command: ["sh", "-c", "echo 'Инициализация приложения...'; sleep 5; echo 'Инициализация завершена'"]
